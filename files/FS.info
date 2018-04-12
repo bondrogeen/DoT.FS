@@ -4,7 +4,7 @@
  "description": "File editor.",
  "version": "0.0.1",
  "homepage": "",
- "files": ["FS.init", "FS.info", "FS.lua", "FS.html","FS_CM.css","FS_CM,js","FS_lua.js"],
+ "files": ["FS.init", "FS.info", "FS.lua", "FS.html","FS_CM.css.gz","FS_CM.js.gz","FS_lua.js"],
  "page": "FS.html",
  "img": "https://raw.githubusercontent.com/bondrogeen/FS/master/doc/logo.jpg",
  "repository": {
