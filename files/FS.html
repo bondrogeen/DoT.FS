@@ -73,6 +73,12 @@
    lineNumbers: true
   });
 
+  editor.setValue("your code here");
+
+
+  alert(editor.getValue());
+
+
   function logout() {
    document.cookie = "id=";
    location.href = '/index.html';
