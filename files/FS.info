@@ -1,0 +1,28 @@
+{
+ "name": "FS",
+ "type": "module",
+ "description": "File editor.",
+ "version": "0.0.1",
+ "homepage": "",
+ "files": ["FS.init", "FS.info", "FS.lua", "FS.html","FS_CM.css","FS_CM,js","FS_lua.js"],
+ "page": "FS.html",
+ "img": "https://raw.githubusercontent.com/bondrogeen/FS/master/doc/logo.jpg",
+ "repository": {
+  "type": "git",
+  "url": "https://github.com/bondrogeen/FS"
+ },
+ "author": {
+  "name": "bondrogeen",
+  "email": "bondrogeen@gmail.com"
+ },
+ "native": [
+  {
+   "id": "run",
+   "val": false,
+   "type": "checkbox",   
+   "name": "Run"
+  }
+ ],
+ "license": "MIT",
+ "modules": ["file"]
+}
