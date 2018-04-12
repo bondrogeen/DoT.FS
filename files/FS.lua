@@ -7,11 +7,11 @@ return j
 end
 
 local function list()
+ print(str(file.list()))
  return str(file.list())
 end
 
 local function del(t)
- return r
 if file.exists(t.name) then
  r=file.remove(t.name)
  print("File "..t.name.."remove")
@@ -25,8 +25,9 @@ if file.open("init.lua", "r") then
   file.close()
 end
 end
+
 local function info()
- remaining, used, total=file.fsinfo()
+-- remaining, used, total=file.fsinfo()
 end
 
 local function rename(t)
@@ -36,6 +37,7 @@ local function rename(t)
 end
 
 return function (t)
+ print(str(t))
  local r
 if t.run then r=run(t.run)end
 if t.list then r=list()end

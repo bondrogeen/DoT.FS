@@ -9,17 +9,31 @@
  <link rel="stylesheet" href="style.css.gz" />
  <script src="http://git.codedevice.ru/js/codemirror.js"></script>
  <!-- <link rel="stylesheet" href="iot.min.css"/>-->
- <!-- <link rel="stylesheet" href="FS_CM.css.gz">-->
  <style>
   .CodeMirror {
    border: 1px solid black;
+   border-radius: 5px;
   }
 
+  .l-g {
+   height: 600px;
+   overflow-y: auto;
+   border: 1px solid black;
+   border-radius: 5px;
+  }
+  form{
+   padding: 10px;
+  }
+
+  .noMar{
+   margin: 0px;
+   margin-bottom: 5px;
+  }
  </style>
 </head>
 
-
 <body>
+ <div id="loader" class="loader hide"></div>
  <div id="sideNav" class="sidenav">
   <span href="javascript:void(0)" class="close" onclick="document.getElementById('sideNav').classList.toggle('open');">&times;</span>
   <div class="in"></div>
@@ -47,26 +61,53 @@
    </div>
   </div>
  </div>
-
  <div class="cont">
   <div class="row">
-   <div class="s12 m2 l2">
+   <div class="s12 m3 l3">
     <h1>File list</h1>
-   </div>
-   <div class="s12 m10 l-9 ">
-    <h1>Editor</h1>
+    <ul id="fileList" class="l-g"></ul>
 
+   </div>
+   <div class="s12 m9 l-9 ">
+       <h1>Editor</h1>
+   <div class="row">
+    <div class="group s12 m4 l4 noMar">
+     <input type="text" id="fileName" name="text" required=" " value="">
+     <label for="text">File name</label>
+    </div>
+    <div class="group s12 m8 l8 noMar">
+        <button id="fileSave" class="right">Save</button>
+        <button id="fileDel" class="right">Del</button>
+        <button id="fileAdd" class="right">Add</button>
+    </div>
+   </div>
     <form><textarea id="code" name="code"></textarea></form>
     <div class="group">
-     <button id="save_m" class="right">Save</button>
+     <button id="save_m" class="right">Send</button>
     </div>
-
    </div>
-
   </div>
  </div>
  <script>
-  var arr = ["FS_CM.js.gz","FS_lua.js"];
+  document.getElementById('loader').classList.remove('hide');
+  function send(page, data, callback) {
+   var req = new XMLHttpRequest();
+   req.open("POST", page, true);
+   req.setRequestHeader('Content-Type', 'application/json');
+   req.addEventListener("load", function() {
+    if (req.status < 400) {
+     callback(req.responseText);
+    } else {
+     callback(false);
+    }
+   });
+   req.send(JSON.stringify(data));
+  }
+
+  var arr = ["FS_CM.js.gz", "FS_lua.js"];
+  var editor;
+  var loading;
+
   function addScript(src, end) {
    var script = document.createElement('script');
    script.src = src;
@@ -75,7 +116,7 @@
    script.onload = function() {
     if (!this.executed) {
      this.executed = true;
-      next();
+     next();
     }
    };
    script.onerror = function() {
@@ -97,45 +138,95 @@
 
   window.onload = function() {
    CSSLoad('FS_CM.css.gz');
-   if (typeof(CodeMirror)==="function" ){
+   if (typeof(CodeMirror) === "function") {
     arr.splice(0, 1);
-     addScript(arr[0]);
-   }else{
-     addScript(arr[0]);
+    addScript(arr[0]);
+   } else {
+    addScript(arr[0]);
    }
   }
 
-  function next(){
+  function next() {
    arr.splice(0, 1);
-   if (arr.length>=1){
+   if (arr.length >= 1) {
     console.log(arr.length);
     console.log(arr[0]);
     addScript(arr[0]);
-   }else{
+   } else {
     console.log("End");
     afterLoad();
    }
   }
 
+  function pars(d) {
+   try {
+    return JSON.parse(d);
+   } catch (e) {
+    console.error(e);
+    return false;
+   }
+
+  }
+
   function afterLoad() {
-   var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+   editor = CodeMirror.fromTextArea(document.getElementById("code"), {
     matchBrackets: true,
     theme: "neat",
     matchBrackets: true,
     lineNumbers: true
    });
    editor.setValue("your code here");
-//   alert(editor.getValue());
+   //   alert(editor.getValue());
+   send("FS.lua", {
+    list: true
+   }, function(res) {
+    console.log(res);
+    if (res) {
+     var files = pars(res)
+     for (var key in files) {
+      //       console.log(key+":"+files[key]);
+      file(key, files[key])
+     }
+     document.getElementById('fileList').style.height = (window.innerHeight - 200) + "px";
+     document.getElementById('loader').classList.add('hide');
+    }
+   });
+  }
+
+  function load(id) {
+   if (!loading) {
+    loading = true;
+    document.getElementById('loader').classList.remove('hide');
+    send(id, {
+     fget: true
+    }, function(res) {
+     console.log(res);
+     if (res) {
+      editor.setValue(res);
+      document.getElementById('fileName').value=id;
+     }
+     document.getElementById('loader').classList.add('hide');
+     loading = false;
+    })
+   }
+  }
+
+  function file(name, size) {
+   var li = document.createElement('li');
+   li.className = "lg-i";
+   li.id = name;
+   li.onclick = function() {
+    load(this.id)
+   };
+   li.innerHTML = name + " : " + size + " byte";
+   fileList.appendChild(li)
   }
 
   function logout() {
    document.cookie = "id=";
    location.href = '/index.html';
   }
-
  </script>
- <!-- <script src="FS_CM.js.gz"></script>-->
-<!-- <script src="FS_lua.js"></script>-->
 </body>
 
 </html>
