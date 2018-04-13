@@ -1,3 +1,4 @@
+
 local function str(t)
 local o,j
 if type(t)=="table"then
@@ -6,27 +7,31 @@ else j=tostring(t)end
 return j
 end
 
-local function list()
- print(str(file.list()))
- return str(file.list())
-end
-
 local function del(t)
+ local r
 if file.exists(t.name) then
- r=file.remove(t.name)
- print("File "..t.name.."remove")
+ file.remove(t.name)
+ r=true
 end
  return r
 end
 
-local function add(t)
-if file.open("init.lua", "r") then
-  print(file.readline())
-  file.close()
-end
+local function save(t)
+ if t.new then
+  if file.open(t.name,"w")then
+   file.write(t.data)
+   file.close()
+  end
+ else
+  if file.open(t.name,"a+")then
+   file.write(t.data)
+   file.close()
+  end
+ end
 end
 
-local function info()
+local function info(t)
+
 -- remaining, used, total=file.fsinfo()
 end
 
@@ -37,14 +42,12 @@ local function rename(t)
 end
 
 return function (t)
- print(str(t))
- local r
+local r
 if t.run then r=run(t.run)end
-if t.list then r=list()end
-if t.init then r=init(t.init)end
+if t.list then r=file.list()end
 if t.save then r=save(t.save)end
 if t.del then r=del(t.del)end
- return r
+return str(r)
 end
 
 
