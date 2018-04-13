@@ -1,7 +1,8 @@
-# DoT
+# FS
  
-The plugin FS for [DoT](https://github.com/bondrogeen/DoT) File editor. (developing) 
-
+The plugin FS for [DoT](https://github.com/bondrogeen/DoT) (developing) 
+File editor.
+Allows you to edit, delete and create files.
 
 ![Screen](doc/Screenshot1.jpg)
 
