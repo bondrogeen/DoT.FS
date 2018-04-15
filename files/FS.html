@@ -76,14 +76,14 @@
       <label for="text">File name</label>
      </div>
      <div class="group s12 m8 l8 noMar">
-      <button id="fileSave" onclick="save()" class="right">Save</button>
+      <button id="fileSave" class="right" onclick="save()">Save</button>
       <button id="fileDel" class="right" onclick="del(false);">Del</button>
-      <button id="fileAdd"  class="right">Add</button>
+      <button id="fileAdd"  class="right" onclick="create();">Create</button>
      </div>
     </div>
     <form><textarea id="code" name="code"></textarea></form>
     <div class="group">
-     <button id="save_m" class="right">Send</button>
+     <button class="right" onclick="run();">Send</button>
     </div>
    </div>
   </div>
@@ -186,7 +186,7 @@
     matchBrackets: true,
     lineNumbers: true
    });
-   editor.setValue("your code here");
+   editor.setValue("Your code here");
    //   alert(editor.getValue());
    loadList();
   }
@@ -207,6 +207,8 @@
       } else {
        loadList();
        modal("Fail removed")
+       editor.setValue("");
+       document.getElementById('fileName').value="";
       }
       console.log(res);
      }
@@ -232,6 +234,7 @@
   }
 
   function sendTextToFile(name, data, stop, create) {
+   document.getElementById('loader').classList.remove('hide');
    send("FS.lua", {
     save: {
      new: create,
@@ -243,6 +246,9 @@
      console.log(res);
      if (stop) {
       slice(name, false);
+     }else{
+      loadList();
+      document.getElementById('loader').classList.add('hide');
      }
     }
    });
@@ -275,6 +281,21 @@
    }
   }
 
+  function create(){
+   document.getElementById('fileName').value="";
+   document.getElementById('fileName').focus();
+   editor.setValue("");
+  }
+
+    function run(){
+   var data = editor.getValue();
+   send("FS.lua", {send: data}, function(res) {
+    if(res){
+       console.log(res);
+       }
+   });
+  }
+
   function file(name, size) {
    var li = document.createElement('li');
    li.className = "lg-i";
@@ -300,7 +321,7 @@
     '<div class="m-body"><p>' + text +
     '</p></div>' +
     '<div class="m-foo">' +
-    (type ? '<button onclick="' + type + '">Yes</button>' : '') +
+    (type ? '<button class="danger" onclick="' + type + '">Yes</button>' : '') +
     '<button onclick="Modal.classList.add(\'hide\');">' + (type ? 'No' : 'Close') + '</button></div>'
    Modal.appendChild(div)
   }
