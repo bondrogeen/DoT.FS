@@ -76,15 +76,17 @@
       <label for="text">File name</label>
      </div>
      <div class="group s12 m8 l8 noMar">
-      <button id="fileSave" class="right" onclick="save()">Save</button>
+      <button id="fileSave" class="right" onclick="save(false)">Save</button>
       <button id="fileDel" class="right" onclick="del(false);">Del</button>
       <button id="fileAdd"  class="right" onclick="create();">Create</button>
      </div>
     </div>
     <form><textarea id="code" name="code"></textarea></form>
+<!--
     <div class="group">
      <button class="right" onclick="run();">Send</button>
     </div>
+-->
    </div>
   </div>
  </div>
@@ -174,6 +176,7 @@
      }
      document.getElementById('fileList').style.height = (window.innerHeight - 200) + "px";
      document.getElementById('fileList').style.width = "100%";
+     document.getElementById('fileList').style.fontWeight= 700;
      document.getElementById('loader').classList.add('hide');
     }
    });
@@ -249,17 +252,22 @@
      }else{
       loadList();
       document.getElementById('loader').classList.add('hide');
+      Modal.classList.add('hide');
      }
     }
    });
   }
 
-  function save() {
-   text = editor.getValue();
+  function save(d) {
    var name = document.getElementById('fileName').value;
+   if (d){
+   text = editor.getValue();
    name = name.replace(/\s+/g, '');
    if (name != "") {
     slice(name, true);
+   }
+   }else {
+    modal("Save file : <b>" + name + "</b> ?", "save(true);")
    }
   }
 

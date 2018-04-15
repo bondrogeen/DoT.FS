@@ -2,7 +2,7 @@
  "name": "FS",
  "type": "module",
  "description": "File editor.",
- "version": "0.0.2",
+ "version": "0.0.3",
  "homepage": "",
  "files": ["FS.init", "FS.info", "FS.lua", "FS.html","FS_CM.css.gz","FS_CM.js.gz","FS_lua.js"],
  "page": "FS.html",

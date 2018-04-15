@@ -8,6 +8,8 @@ Allows you to edit, delete and create files.
 
 ## Changelog
 
+### 0.0.3 (2018-04-15)
+* (bondrogeen) minor fix.
 ### 0.0.2 (2018-04-14)
 * (bondrogeen) beta test.
 ### 0.0.1 (2018-04-12)
